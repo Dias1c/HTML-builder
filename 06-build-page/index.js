@@ -152,6 +152,28 @@ async function makeDir(targetPath) {
 
 /**
  *
+ * @param {string} targetPath
+ */
+async function rmSafe(targetPath) {
+  await new Promise((res, rej) => {
+    fs.rm(
+      targetPath,
+      {
+        recursive: true,
+      },
+      (err) => {
+        if (err && err.code != 'ENOENT') {
+          rej(err);
+          return;
+        }
+        res();
+      },
+    );
+  });
+}
+
+/**
+ *
  * @param {string} str
  * @param {Object} obj
  * @returns {string}
@@ -249,6 +271,7 @@ async function buildProject(
   if (!targetDir) {
     throw new Error('buildProject: property "targetDir" is required');
   }
+  await rmSafe(targetDir);
   await makeDir(targetDir);
 
   if (!pathToTempleteFile) {
