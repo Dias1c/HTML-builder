@@ -3,6 +3,28 @@ const fsp = require('fs/promises');
 const path = require('path');
 
 /**
+ *
+ * @param {string} targetPath
+ */
+async function rmSafe(targetPath) {
+  await new Promise((res, rej) => {
+    fs.rm(
+      targetPath,
+      {
+        recursive: true,
+      },
+      (err) => {
+        if (err && err.code != 'ENOENT') {
+          rej(err);
+          return;
+        }
+        res();
+      },
+    );
+  });
+}
+
+/**
  * @param {string} src
  * @returns {fs.Stats}
  */
@@ -23,7 +45,10 @@ async function getPathStat(src) {
  * @param {string} src
  * @param {string} target
  */
-async function deepCopy(src, target) {
+async function deepCopy(src, target, withRemove = true) {
+  if (withRemove) {
+    await rmSafe(target);
+  }
   const srcStat = await getPathStat(src);
   if (srcStat.isFile()) {
     fs.copyFile(src, target, (err) => {
