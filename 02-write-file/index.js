@@ -22,7 +22,7 @@ process.on('SIGINT', () => breakListeningWithMessage());
 
 stdin.on('data', (chunk) => {
   const text = chunk.toString();
-  if (text == 'exit\n') {
+  if (text == 'exit\n' || text == 'exit') {
     breakListeningWithMessage();
     return;
   }
