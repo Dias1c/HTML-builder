@@ -11,10 +11,11 @@ const printFileInfoByPath = (pathToFile) => {
       return;
     }
 
-    const filename = path.basename(pathToFile);
-    const filetext = path.extname(pathToFile);
+    const parsed = path.parse(pathToFile);
     const filesize = stat.size;
-    console.log(`${filename} - ${filetext.replace('.', '')} - ${filesize}b`);
+    console.log(
+      `${parsed.name} - ${parsed.ext.replace('.', '')} - ${filesize}b`,
+    );
   });
 };
 
