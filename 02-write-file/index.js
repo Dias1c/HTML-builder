@@ -1,3 +1,4 @@
+const os = require('os');
 const process = require('process');
 const path = require('path');
 const fs = require('fs');
@@ -22,7 +23,7 @@ process.on('SIGINT', () => breakListeningWithMessage());
 
 stdin.on('data', (chunk) => {
   const text = chunk.toString();
-  if (text.toLowerCase().trim() == 'exit') {
+  if (text == `exit${os.EOL}`) {
     breakListeningWithMessage();
     return;
   }
